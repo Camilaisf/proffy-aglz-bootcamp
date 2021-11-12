@@ -1,0 +1,42 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Run Tests
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    #executa na branch main
+    branches: [main]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  cypress-run:
+    #vai executar na ubuntu..
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+        #vai baixar código
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Instalar deps do web
+        uses: bahmutov/npm-install@v1
+        with: 
+          working-directory: web
+      - name: Instalar deps do server
+        uses: bahmutov/npm-install@v1
+        with: 
+          working-directory: server   
+      - name: Component & API & UI test
+        uses: cypress-io/github-action@v2
+        with: 
+          working-directory: web
+          install: false
+          start: npm run start:ci
+          wait-on: 'http://localhost:3000'
+          
+
+      #baixar o codigo
+      #instalar dependencias server e web
+      #subir as aplicaçoes server e web
+      #executar os nossos testes
